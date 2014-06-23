@@ -1,0 +1,34 @@
+table {
+    width: 50%;
+}
+
+table caption
+{
+    text-align: left;
+    background: #000;
+    color: #fff;
+}
+
+table thead, table tr, table th, table td
+{
+    text-align: left;
+}
+
+fieldset {
+    width: 500px;
+}
+
+fieldset label {
+    display: block;
+    padding: 3px 0px 3px 0px;
+}
+
+fieldset label input {
+}
+
+fieldset label select {
+}
+
+.formError {
+    color: #ff3333;
+}
