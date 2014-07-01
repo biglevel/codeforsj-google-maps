@@ -1,12 +1,7 @@
 <?php
 
-class Env_Ckennedy extends Production
+class Env_Ckennedy extends Env_Production
 {
-
-    public function setTimezone()
-    {
-        date_default_timezone_set('America/Los_Angeles');
-    }
 
     public function setPhpSettings()
     {
@@ -14,24 +9,7 @@ class Env_Ckennedy extends Production
         ini_set('display_errors', true);
     }
 
-    public function setAuthentication()
-    {
-        $this->_set('auth', array(
-            'class'    => 'Main_Model_Authenticate',
-            'username' => 'admin',
-            'password' => 'admin'
-        ));
-    }
 
-    public function setSite()
-    {
-        $this->_set('owner', array(
-            'company' => '',
-            'name'    => '',
-            'email'   => ''
-        ));
-    }
-    
     public function setDatabase()
     {
         $this->_set('mysql', array(
@@ -46,13 +24,6 @@ class Env_Ckennedy extends Production
             'user' => 'root',
             'pass' => '',
             'port' => '3306'
-        ));
-    }
-
-    public function setSqlite()
-    {
-        $this->_set('sqlite', array(
-            'location' => SOURCE . '/data/db/zip.db'
         ));
     }
     

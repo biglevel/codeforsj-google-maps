@@ -11,7 +11,7 @@
 
         $.each(points, function(i, point) {
             //console.log(point);
-            coords.push(new google.maps.LatLng(point.latitude, point.longitude));
+            coords.push(new google.maps.LatLng(point.lat, point.long));
         });
 
         // Construct the polygon.
@@ -46,7 +46,34 @@
         infoWindow = new google.maps.InfoWindow();
 
     }
-    
+
+    function loadShapes(offset)
+    {
+        // Fetch zip codes
+        var jqxhr = $.getJSON("/api/polygon?map_id=<?php echo $this->map_id; ?>&offset=" + offset, function(response) {
+            //console.log( "success" );
+            $.each(response.data.results, function(index, item) {
+                drawPolygon(item.zip_code, item.total, item.shape);
+            });
+            /*
+            if (response.data.next_page != -1)
+            {
+                loadShapes(response.data.next_page);
+            }
+            */
+
+        })
+        .done(function() {
+            //console.log( "second success" );
+        })
+        .fail(function() {
+            //console.log( "error" );
+        })
+        .always(function() {
+            //console.log( "complete" );
+        });
+    }
+
     $(document).ready(function() {
         // This example creates a simple polygon representing the Bermuda Triangle.
         function initialize() {
@@ -61,25 +88,13 @@
                  */
                 mapTypeId: google.maps.MapTypeId.<?php echo $this->map->type; ?>
             };
-
             map = new google.maps.Map(document.getElementById('map-canvas'), mapOptions);
-
-            // Fetch zip codes
-            var jqxhr = $.getJSON("/api/polygon?map_id=<?php echo $this->map_id; ?>", function(response) {
-                //console.log( "success" );
-                $.each(response.data, function(index, item) {
-                    drawPolygon(item.zip_code, item.total, item.shape);
-                });
-            })
-            .done(function() {
-                //console.log( "second success" );
-            })
-            .fail(function() {
-                //console.log( "error" );
-            })
-            .always(function() {
-                //console.log( "complete" );
+            $.ajaxSetup({
+                async: true
             });
+            for(i=0;i<16;i++) {
+                loadShapes((i*50));
+            }
 
         }
         google.maps.event.addDomListener(window, 'load', initialize);

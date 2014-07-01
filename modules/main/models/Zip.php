@@ -3,22 +3,22 @@
 class Main_Model_Zip
 {
     
-    public static function fetch($map_id)
+    public static function fetch($map_id, $offset, $limit)
     {
         $query = new Mysql_Query();
         $query->select("
              LPAD(`map_data`.`zip_code`,5,0) as `zip_code`,
             sum(`map_data`.`total`) as `total`,
             `shapes`.`geoid10` as `geo_id`,
-            `shapes`.`intptlat10`,
-            `shapes`.`intptlon10`,
             AsText(`shapes`.`SHAPE`) as `shape`
         ")
         ->from("`map_data`")
         ->leftJoin("`shapes`", "on (`shapes`.`zcta5ce10` = LPAD(`map_data`.`zip_code`,5,0))")
         ->where ("`map_data`.`map_id` = {$map_id}")
         ->group("`map_data`.`zip_code`")
-        ->order("`map_data`.`zip_code`");
+        ->order("`map_data`.`zip_code` desc")
+        ->offset($offset)
+        ->limit($limit);
         $results = $query->fetch();
         foreach ($results as &$row)
         {
@@ -39,8 +39,8 @@ class Main_Model_Zip
             {
                 list($longitude, $latitude) = explode(" ", $point);
                 $point = new stdClass();
-                $point->longitude = $longitude;
-                $point->latitude = $latitude;
+                $point->long = $longitude;
+                $point->lat = $latitude;
                 array_push($points, $point);
             }
         }

@@ -10,7 +10,8 @@
  */
 class Api_Model_Polygon extends Api_Model_Authorization
 {
-    
+    const LIMIT = 50;
+
     /**
      * GET list of Polygons by map_id
      * 
@@ -29,8 +30,12 @@ class Api_Model_Polygon extends Api_Model_Authorization
         {
             throw new Exception("Invalid map_id.", 400);
         }
-
-        return Main_Model_Zip::fetch($this->get['map_id']);
+        $offset = (empty($this->get['offset'])) ? 0 : (int) $this->get['offset'];
+        $results = Main_Model_Zip::fetch($this->get['map_id'], $offset, self::LIMIT);
+        return array(
+            'results' => $results,
+            'next_page' => (count($results) == self::LIMIT) ? self::LIMIT+$offset : -1
+        );
     }
     
 }

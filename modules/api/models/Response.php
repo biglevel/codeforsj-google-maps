@@ -94,7 +94,8 @@ class Api_Model_Response
         }
         if (self::$format == 'json')
         {
-            //header('Content-type: application/json');
+            ob_start('ob_gzhandler');
+            header('Content-type: application/json');
             echo json_encode($this);
         }
         elseif (self::$format == 'xml')

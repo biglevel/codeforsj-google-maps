@@ -7,12 +7,7 @@ class Env_Production extends Environment_Base
     {
         date_default_timezone_set('America/Los_Angeles');
     }
-
-    public function setPhpSettings()
-    {
-        ini_set('display_errors', 'On');
-    }
-
+    
     public function setAuthentication()
     {
         $this->_set('auth', array(
@@ -25,24 +20,27 @@ class Env_Production extends Environment_Base
     public function setSite()
     {
         $this->_set('owner', array(
-            'company' => 'Your Company Name',
-            'name'    => 'Your Email',
-            'email'   => 'email@domain.com'
+            'company' => '',
+            'name'    => '',
+            'email'   => ''
+        ));
+    }
+    
+    public function setDatabase()
+    {
+        $this->_set('mysql', array(
+            'database' => '',
+            'host' => '127.0.0.1',
+            'user' => '',
+            'pass' => '',
+            'port' => '3306'
         ));
     }
 
     public function setSqlite()
     {
         $this->_set('sqlite', array(
-            'location' => SOURCE . '/data/db/campaigns.db'
+            'location' => SOURCE . '/data/db/zip.db'
         ));
     }
-
-    public function setCampaign()
-    {
-        $this->_set('campaign', array(
-            'api_host' => 'login.envyusmedia.com'
-        ));
-    }
-
 }
