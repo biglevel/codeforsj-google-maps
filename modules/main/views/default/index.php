@@ -2,6 +2,8 @@
 
 <script>
     var map;
+    var tier_colors = <?php echo json_encode($this->tier_colors); ?>
+
     function drawPolygon(zip_code, total, points)
     {
         var zip;
@@ -14,26 +16,38 @@
             coords.push(new google.maps.LatLng(point.lat, point.long));
         });
 
+        var color = '';
+        $.each(tier_colors, function(index, item){
+
+            if (total >= item.min_val && total <= item.max_val)
+            {
+                color = item.color;
+                return;
+            }
+        });
+
         // Construct the polygon.
         zip = new google.maps.Polygon({
             paths: coords,
             strokeColor: '#FF0000',
             strokeOpacity: 0.8,
             strokeWeight: 1,
-            fillColor: '#FF0000',
-            fillOpacity: 0.35,
+            fillColor: color,
+            fillOpacity:.5,
             clickable: true,
             name: "Zip Code: " + zip_code,
             total: "Contributions: $" + total
         });
         zip.setMap(map);
+
         google.maps.event.addListener(zip, "mouseover", function(event) {
             this.setOptions({fillColor: "#00FF00"});
             
         });
         google.maps.event.addListener(zip,"mouseout",function(){
-            this.setOptions({fillColor: "#FF0000"});
+            this.setOptions({fillColor: color});
         });
+
         google.maps.event.addListener(zip,"click",function(event){
             var contentString = '<div class="viewContribution"><b>'+this.name+'</b><br>' + this.total +
                 //'Clicked location: <br>' + event.latLng.lat() + ',' + event.latLng.lng() +

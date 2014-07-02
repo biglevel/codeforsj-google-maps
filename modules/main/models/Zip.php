@@ -22,7 +22,6 @@ class Main_Model_Zip
         $results = $query->fetch();
         foreach ($results as &$row)
         {
-            $row->total = number_format($row->total, 2);
             $row->shape = self::parsePolygon($row->shape);
         }
         return $results;
