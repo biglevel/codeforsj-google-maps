@@ -1,3 +1,6 @@
+<p>
+    <a href="/admin">Maps</a> | <a href="/admin/map">Add Map</a> | <a href="/admin/candidates">Generate Candidate JSON</a>
+</p>
 <form action="/admin/map<?php echo (is_numeric($this->map_id)) ? '?map_id=' . $this->map_id : ''; ?>" method="post">
     <input type="hidden" name="" value="" />
     <?php if ($this->form->errors > 0): ?>

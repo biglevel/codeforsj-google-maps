@@ -1,5 +1,5 @@
 <p>
-    <a href="/admin/map">Add</a>
+    <a href="/admin">Maps</a> | <a href="/admin/map">Add Map</a> | <a href="/admin/candidates">Generate Candidate JSON</a>
 </p>
 <table>
     <caption>Maps</caption>

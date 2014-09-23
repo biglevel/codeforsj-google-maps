@@ -18,6 +18,10 @@ class Admin_Controller_Default extends Controller
         $this->maps = Main_Model_Map::fetch();
     }
 
+    public function candidates() {
+
+    }
+
     public function download() {
         $this->map_id = $this->get->value('map_id');
         if (!is_numeric($this->map_id)) {
