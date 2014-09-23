@@ -57,7 +57,6 @@
             infoWindow.setPosition(event.latLng);
             infoWindow.open(map);
         });
-        infoWindow = new google.maps.InfoWindow();
 
     }
 
@@ -111,6 +110,9 @@
             }
 
         }
+
+        infoWindow = new google.maps.InfoWindow();
+
         google.maps.event.addDomListener(window, 'load', initialize);
 
 

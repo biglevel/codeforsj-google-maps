@@ -5,6 +5,8 @@ class Admin_Controller_Default extends Controller
     public $maps;
     public $map_id;
     public $form;
+    protected $_writes = 0;
+    protected $_files = array();
 
     public function bootstrap()
     {
@@ -14,6 +16,78 @@ class Admin_Controller_Default extends Controller
     public function index()
     {
         $this->maps = Main_Model_Map::fetch();
+    }
+
+    public function download() {
+        $this->map_id = $this->get->value('map_id');
+        if (!is_numeric($this->map_id)) {
+            die("No map could be found by that ID.");
+        }
+        $source = SOURCE."/data/shapes/{$this->map_id}";
+        if (!file_exists($source)) {
+            mkdir($source, 0777, true);
+        }
+        else {
+            $files = glob("{$source}/*"); // get all file names
+            foreach($files as $file){ // iterate files
+                if(is_file($file)){
+                    unlink($file); // delete file
+                }
+            }
+        }
+        // PUll data from database
+        $data = Main_Model_Zip::shapes($this->map_id);
+        if (count($data)==0) {
+            die("No data could be found for this map_id.");
+        }
+
+        // Loop through and write json files that have zip code shapes
+        $buffer = array();
+        foreach($data as $row) {
+            array_push($buffer, $row);
+            if (count($buffer)>=50) {
+                $this->_writeCache($source, $buffer);
+                $buffer = array();
+            }
+        }
+        if (count($buffer)>0) {
+            $this->_writeCache($source, $buffer);
+        }
+
+        // Archive shape json files into zip format.
+        $zip = new ZipArchive;
+        $archive_file = "shapes{$this->map_id}.zip";
+        $archive = "{$source}/{$archive_file}";
+        if ($zip->open($archive, ZipArchive::CREATE) === TRUE) {
+            foreach($this->_files as $file) {
+                $zip->addFile($file, basename($file));
+            }
+            $zip->close();
+        } else {
+            die("Failed to zip archive... :(");
+        }
+        // Clean up json files since they'll be archived
+        foreach($this->_files as $file) {
+            unlink($file); // delete file
+        }
+
+        // Prepare download
+        $fp = fopen($archive, 'rb');
+        // send the right headers
+        header("Content-Type: application/zip");
+        header("Content-Disposition: attachment; filename={$archive_file}");
+        header("Pragma: no-cache");
+        header("Content-Length: " . filesize($archive));
+        // dump the picture and stop the script
+        fpassthru($fp);
+        die();
+    }
+
+    protected function _writeCache($save_path, $data) {
+        $file = "{$save_path}/zips_{$this->_writes}.json";
+        file_put_contents($file, json_encode($data));
+        array_push($this->_files, $file);
+        $this->_writes++;
     }
 
     public function map()

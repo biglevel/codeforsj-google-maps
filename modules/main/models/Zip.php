@@ -2,7 +2,30 @@
 
 class Main_Model_Zip
 {
-    
+
+    public static function shapes($map_id) {
+        $query = new Mysql_Query();
+        $query->select("
+          `shapes`.`geoid10` as `zip_code`,
+          AsText(`shapes`.`SHAPE`) as `shape`
+        ")
+        ->from("
+            (
+                select LPAD(`map_data`.`zip_code`,5,0) as `zip_code`
+                from `map_data`
+                where `map_data`.`map_id` = 1
+                group by `map_data`.`map_id`, `map_data`.`zip_code`
+            ) as `zip_codes`
+        ")
+        ->innerJoin("`shapes`", "on (`shapes`.`zcta5ce10` = `zip_codes`.`zip_code`)");
+        $results = $query->fetch();
+        foreach ($results as &$row)
+        {
+            $row->shape = self::parsePolygon($row->shape);
+        }
+        return $results;
+    }
+
     public static function fetch($map_id, $offset, $limit)
     {
         $query = new Mysql_Query();

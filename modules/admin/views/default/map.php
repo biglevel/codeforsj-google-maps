@@ -27,6 +27,13 @@
             <?php echo $this->form->contributions->field(); ?>
         </label>
     </fieldset>
+    <fieldset>
+        <legend>Map Shapes</legend>
+        <label for="delimiter">
+        <span id="download_files">Zip Code Shapes</span>
+        <a href="/admin/download?map_id=<?php echo $this->map_id; ?>">Download</a>
+        </label>
+    </fieldset>
     <?php endif; ?>
     <fieldset>
         <legend>Actions</legend>
