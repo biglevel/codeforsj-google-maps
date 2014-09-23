@@ -3,6 +3,9 @@
 class Main_Model_Zip
 {
     public static function shapes($map_id, $page = 0,  $limit = 50) {
+        if (!is_numeric($map_id)) {
+            return array();
+        }
         $query = new Mysql_Query();
         $query->select("
           `shapes`.`geoid10` as `zip_code`,
@@ -10,10 +13,10 @@ class Main_Model_Zip
         ")
         ->from("
             (
-                select LPAD(`map_data`.`zip_code`,5,0) as `zip_code`
+                select LPAD(`map_data`.`zip`,5,0) as `zip_code`
                 from `map_data`
-                where `map_data`.`map_id` = 1
-                group by `map_data`.`map_id`, `map_data`.`zip_code`
+                where `map_data`.`map_id` = {$map_id}
+                group by `map_data`.`zip`
             ) as `zip_codes`
         ")
         ->innerJoin("`shapes`", "on (`shapes`.`zcta5ce10` = `zip_codes`.`zip_code`)")

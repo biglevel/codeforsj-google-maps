@@ -25,7 +25,7 @@ class Admin_Controller_Default extends Controller
         if (is_numeric($this->map_id))
         {
             Admin_Form_Map::$include_data_manipulation = true;
-            $this->data = json_encode(Main_Model_Map::data($this->map_id));
+            $this->data = strtolower(json_encode(Main_Model_Map::data($this->map_id)));
         }
 
         $this->form = new Admin_Form_Map();
@@ -109,13 +109,15 @@ class Admin_Controller_Default extends Controller
         }
         // Pull data from database
         $page = 0;
-        for($i=0;$i<20;$i++) {
-            $data = Main_Model_Zip::shapes($this->map_id);
-            if (count($data)==0) {
+        while (true) {
+            $data = Main_Model_Zip::shapes($this->map_id, $page);
+            if (count($data)>0) {
+                $this->_writeCache($source, $data);
+                $page++;
+            }
+            else {
                 break;
             }
-            $this->_writeCache($source, $data);
-            $page++;
         }
         if (count($this->_files)==0) {
             die("No shapes could be found for this dataset");
