@@ -39,23 +39,18 @@ class Admin_Controller_Default extends Controller
                 }
             }
         }
-        // PUll data from database
-        $data = Main_Model_Zip::shapes($this->map_id);
-        if (count($data)==0) {
-            die("No data could be found for this map_id.");
-        }
-
-        // Loop through and write json files that have zip code shapes
-        $buffer = array();
-        foreach($data as $row) {
-            array_push($buffer, $row);
-            if (count($buffer)>=50) {
-                $this->_writeCache($source, $buffer);
-                $buffer = array();
+        // Pull data from database
+        $page = 0;
+        for($i=0;$i<20;$i++) {
+            $data = Main_Model_Zip::shapes($this->map_id);
+            if (count($data)==0) {
+                break;
             }
+            $this->_writeCache($source, $data);
+            $page++;
         }
-        if (count($buffer)>0) {
-            $this->_writeCache($source, $buffer);
+        if (count($this->_files)==0) {
+            die("No shapes could be found for this dataset");
         }
 
         // Archive shape json files into zip format.

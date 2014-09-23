@@ -2,8 +2,7 @@
 
 class Main_Model_Zip
 {
-
-    public static function shapes($map_id) {
+    public static function shapes($map_id, $page = 0,  $limit = 50) {
         $query = new Mysql_Query();
         $query->select("
           `shapes`.`geoid10` as `zip_code`,
@@ -17,7 +16,9 @@ class Main_Model_Zip
                 group by `map_data`.`map_id`, `map_data`.`zip_code`
             ) as `zip_codes`
         ")
-        ->innerJoin("`shapes`", "on (`shapes`.`zcta5ce10` = `zip_codes`.`zip_code`)");
+        ->innerJoin("`shapes`", "on (`shapes`.`zcta5ce10` = `zip_codes`.`zip_code`)")
+        ->limit($limit)
+        ->offset(($page*$limit));
         $results = $query->fetch();
         foreach ($results as &$row)
         {
