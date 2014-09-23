@@ -30,20 +30,20 @@ class Main_Controller_Default extends Controller
         while (($row = array_shift($data)) == true)
         {
             // set lowest contribution from candidates
-            if ($row->total > 0) {
-                if ($this->min_contribution == 0 || ($row->total < $this->min_contribution)) {
-                    $this->min_contribution = $row->total;
+            if ($row->amount > 0) {
+                if ($this->min_contribution == 0 || ($row->amount < $this->min_contribution)) {
+                    $this->min_contribution = $row->amount;
                 }
                 // set high contribution from candidates
-                if ($row->total > $this->max_contribution) {
-                    $this->max_contribution = $row->total;
+                if ($row->amount > $this->max_contribution) {
+                    $this->max_contribution = $row->amount;
                 }
             }
 
 
             // aggregate totals by candidate and location
-            $this->_totalContributions($row->candidate, $row->zip_code, $row->total);
-            $this->_contributionsByCandidate($row->candidate, $row->zip_code, $row->total);
+            $this->_totalContributions($row->candidate, $row->zip_code, $row->amount);
+            $this->_contributionsByCandidate($row->candidate, $row->zip_code, $row->amount);
         }
         $this->_scaleColors();
     }

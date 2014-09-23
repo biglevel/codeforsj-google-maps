@@ -2,6 +2,29 @@
 
 class Main_Model_Map
 {
+    public static function data($map_id) {
+        if (!is_numeric($map_id)) {
+            return array();
+        }
+        $query = new Mysql_Query();
+        $query->select("`type`,`candidate`,`zip`,`amount`")
+        ->from("`map_data`")
+        ->where("`map_id` = {$map_id}");
+        $data = $query->fetch();
+        $resp = array();
+        foreach($data as $row) {
+            if (!isset($resp[$row->type])) {
+                $resp[$row->type] = array();
+            }
+            if (!isset($resp[$row->type][$row->candidate])) {
+                $resp[$row->type][$row->candidate] = array();
+            }
+            $resp[$row->type][$row->candidate][$row->zip] = $row->amount;
+        }
+        unset($data);
+        return $resp;
+    }
+
     public static function fetch($map_id = false)
     {
         if ($map_id !== false)
@@ -73,7 +96,7 @@ class Main_Model_Map
             Mysql::instance()->execute("delete from `map_data` where `map_id` = {$map_id}");
 
             // Update map data
-            $map_data = new Mysql_Bulk("insert into `map_data` values %s on duplicate key update `total` = values (`total`)");
+            $map_data = new Mysql_Bulk("insert into `map_data` values %s on duplicate key update `amount` = values (`amount`)");
             foreach ($rows as $row)
             {
                 if (empty($row))
@@ -81,20 +104,23 @@ class Main_Model_Map
                     continue;
                 }
                 $columns = explode($data['delimiter'], $row);
-                if (count($columns)!=3)
+                if (count($columns)!=4)
                 {
                     continue;
                 }
-                list($zip, $contribution, $candidate) = $columns;
+                list($type, $candidate, $zip, $amount) = $columns;
+                if (!in_array($type, array('primary', 'runoff', 'pac'))) {
+                    continue;
+                }
                 if (!is_numeric($zip))
                 {
                     continue;
                 }
-                if (!is_numeric($contribution))
+                if (!is_numeric($amount))
                 {
                     continue;
                 }
-                $map_data->add(array($map_id, $zip, "'{$candidate}'", $contribution));
+                $map_data->add(array($map_id, "'{$candidate}'",  "'{$zip}'", "'{$type}'", $amount));
 
             }
             $map_data->save();

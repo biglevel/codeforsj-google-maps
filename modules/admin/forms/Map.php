@@ -80,7 +80,7 @@ class Admin_Form_Map extends Form
             'label'      => 'Contributions',
             'required'   => false,
             'attributes' => array(
-                'style' => 'height: 300px; width: 400px;'
+                'style' => 'width: 640px; height: 320px;'
             )
         ));
     }

@@ -31,16 +31,16 @@ class Main_Model_Zip
     {
         $query = new Mysql_Query();
         $query->select("
-             LPAD(`map_data`.`zip_code`,5,0) as `zip_code`,
-            sum(`map_data`.`total`) as `total`,
+             LPAD(`map_data`.`zip`,5,0) as `zip_code`,
+            sum(`map_data`.`amount`) as `total`,
             `shapes`.`geoid10` as `geo_id`,
             AsText(`shapes`.`SHAPE`) as `shape`
         ")
         ->from("`map_data`")
-        ->leftJoin("`shapes`", "on (`shapes`.`zcta5ce10` = LPAD(`map_data`.`zip_code`,5,0))")
+        ->leftJoin("`shapes`", "on (`shapes`.`zcta5ce10` = LPAD(`map_data`.`zip`,5,0))")
         ->where ("`map_data`.`map_id` = {$map_id}")
-        ->group("`map_data`.`zip_code`")
-        ->order("`map_data`.`zip_code` desc")
+        ->group("`map_data`.`zip`")
+        ->order("`map_data`.`zip` desc")
         ->offset($offset)
         ->limit($limit);
         $results = $query->fetch();
