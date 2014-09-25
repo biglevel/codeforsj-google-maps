@@ -72,6 +72,7 @@ class Admin_Controller_Default extends Controller
                 if ($this->map_id != false)
                 {
                     Main_Model_Map::update($this->map_id, $data);
+                    $this->redirect("/admin/map?map_id={$this->map_id}");
                 }
                 else
                 {
@@ -84,8 +85,8 @@ class Admin_Controller_Default extends Controller
                         }
                     }
                     $model->save();
+                    $this->redirect("/admin");
                 }
-                $this->redirect("/admin");
             }
         }
     }

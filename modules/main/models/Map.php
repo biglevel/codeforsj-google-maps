@@ -7,7 +7,7 @@ class Main_Model_Map
             return array();
         }
         $query = new Mysql_Query();
-        $query->select("`type`,`candidate`,`zip`,`amount`")
+        $query->select("`type`,`candidate`,`deadline`,`zip`,`amount`")
         ->from("`map_data`")
         ->where("`map_id` = {$map_id}");
         $data = $query->fetch();
@@ -19,7 +19,10 @@ class Main_Model_Map
             if (!isset($resp[$row->type][$row->candidate])) {
                 $resp[$row->type][$row->candidate] = array();
             }
-            $resp[$row->type][$row->candidate][$row->zip] = $row->amount;
+            if (!isset($resp[$row->type][$row->candidate][$row->deadline])) {
+                $resp[$row->type][$row->candidate][$row->deadline] = array();
+            }
+            $resp[$row->type][$row->candidate][$row->deadline][$row->zip] = $row->amount;
         }
         unset($data);
         return $resp;
@@ -104,11 +107,14 @@ class Main_Model_Map
                     continue;
                 }
                 $columns = explode($data['delimiter'], $row);
-                if (count($columns)!=4)
+                if (count($columns)==5) {
+                    array_push($columns, "#feb24c");
+                }
+                if (count($columns)!=6)
                 {
                     continue;
                 }
-                list($type, $candidate, $zip, $amount) = $columns;
+                list($type, $candidate, $deadline, $zip, $amount, $color) = $columns;
                 if (!in_array($type, array('primary', 'runoff', 'pac'))) {
                     continue;
                 }
@@ -120,7 +126,7 @@ class Main_Model_Map
                 {
                     continue;
                 }
-                $map_data->add(array($map_id, "'{$candidate}'",  "'{$zip}'", "'{$type}'", $amount));
+                $map_data->add(array($map_id, "'{$candidate}'", "'{$deadline}'",  "'{$zip}'", "'{$type}'", $amount, "'{$color}'"));
 
             }
             $map_data->save();

@@ -18,6 +18,10 @@
         </label>
         <?php endforeach; ?>
     </fieldset>
+    <fieldset>
+        <legend>Actions</legend>
+        <button type="submit" name="submit">Save</button>
+    </fieldset>
     <?php if(is_numeric($this->map_id)): ?>
     <fieldset>
         <legend>Map Data</legend>
@@ -27,19 +31,21 @@
         <ol>
             <li>Type: primary, runoff, pac</li>
             <li>Candidate Name</li>
+            <li>Deadline Date (YYYY-MM-DD)</li>
             <li>Zip</li>
             <li>Amount</li>
+            <li>Color</li>
         </ol>
         <p>Example of data</p>
-        <pre>primary,Nguyen,10012,250.00
-primary,Licarrdo,19711,1000.00
-primary,Oliverio,11414,1434.60
-primary,Cortese,94086,1350.00
-primary,Herrera,20007,1000.00
-runoff,Licarrdo,19711,1000.00
-runoff,Cortese,94086,1350.00
-pac,Licarrdo,19711,1000.00
-pac,Cortese,94086,1350.00
+        <pre>primary,Nguyen,2014-08-01,10012,250.00,#feb24c
+primary,Licarrdo,2014-08-01,19711,1000.00,#feb24c
+primary,Oliverio,2014-08-01,11414,1434.60,#feb24c
+primary,Cortese,2014-08-01,94086,1350.00,#feb24c
+primary,Herrera,2014-08-01,20007,1000.00,#feb24c
+runoff,Licarrdo,2014-09-01,19711,1000.00,#feb24c
+runoff,Cortese,2014-09-01,94086,1350.00,#feb24c
+pac,Licarrdo,2014-09-01,19711,1000.00,#feb24c
+pac,Cortese,2014-09-01,94086,1350.00,#feb24c
         </pre>
         <label for="delimiter">
             <?php echo $this->form->delimiter->label(); ?>
@@ -51,6 +57,10 @@ pac,Cortese,94086,1350.00
         </label>
     </fieldset>
     <fieldset>
+        <legend>Actions</legend>
+        <button type="submit" name="submit">Save</button>
+    </fieldset>
+    <fieldset>
         <legend>Map v2.0</legend>
         <label for="download">Zip Code Shapes</label>
         <a href="/admin/download?map_id=<?php echo $this->map_id; ?>">Download</a>
@@ -59,8 +69,4 @@ pac,Cortese,94086,1350.00
         </label>
     </fieldset>
     <?php endif; ?>
-    <fieldset>
-        <legend>Actions</legend>
-        <button type="submit" name="submit">Save</button>
-    </fieldset>
 </form>
