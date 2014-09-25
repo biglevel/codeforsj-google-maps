@@ -7,7 +7,7 @@ class Main_Model_Map
             return array();
         }
         $query = new Mysql_Query();
-        $query->select("`type`,`candidate`,`deadline`,`zip`,`amount`")
+        $query->select("`type`,`candidate`,`deadline`,`zip`,`amount`,`color`")
         ->from("`map_data`")
         ->where("`map_id` = {$map_id}");
         $data = $query->fetch();
@@ -22,7 +22,9 @@ class Main_Model_Map
             if (!isset($resp[$row->type][$row->candidate][$row->deadline])) {
                 $resp[$row->type][$row->candidate][$row->deadline] = array();
             }
-            $resp[$row->type][$row->candidate][$row->deadline][$row->zip] = $row->amount;
+            $resp[$row->type][$row->candidate][$row->deadline][$row->zip] = new stdClass();
+            $resp[$row->type][$row->candidate][$row->deadline][$row->zip]->amount = $row->amount;
+            $resp[$row->type][$row->candidate][$row->deadline][$row->zip]->color = $row->color;
         }
         unset($data);
         return $resp;

@@ -37,15 +37,15 @@
             <li>Color</li>
         </ol>
         <p>Example of data</p>
-        <pre>primary,Nguyen,2014-08-01,10012,250.00,#feb24c
-primary,Licarrdo,2014-08-01,19711,1000.00,#feb24c
-primary,Oliverio,2014-08-01,11414,1434.60,#feb24c
-primary,Cortese,2014-08-01,94086,1350.00,#feb24c
-primary,Herrera,2014-08-01,20007,1000.00,#feb24c
-runoff,Licarrdo,2014-09-01,19711,1000.00,#feb24c
-runoff,Cortese,2014-09-01,94086,1350.00,#feb24c
-pac,Licarrdo,2014-09-01,19711,1000.00,#feb24c
-pac,Cortese,2014-09-01,94086,1350.00,#feb24c
+        <pre>primary,Nguyen,2014-08-01,95116,250.00,#feb24c
+primary,Licarrdo,2014-08-01,95116,1000.00,#feb24c
+primary,Oliverio,2014-08-01,95116,1434.60,#feb24c
+primary,Cortese,2014-08-01,95116,1350.00,#feb24c
+primary,Herrera,2014-08-01,95116,1000.00,#feb24c
+runoff,Licarrdo,2014-09-01,95116,1000.00,#feb24c
+runoff,Cortese,2014-09-01,95116,1350.00,#feb24c
+pac,Licarrdo,2014-09-01,95116,1000.00,#feb24c
+pac,Cortese,2014-09-01,95116,1350.00,#feb24c
         </pre>
         <label for="delimiter">
             <?php echo $this->form->delimiter->label(); ?>
